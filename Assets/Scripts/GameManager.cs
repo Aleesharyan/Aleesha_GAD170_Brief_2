@@ -19,13 +19,19 @@ public class GameManager : MonoBehaviour
     public GameObject prefab;
     public TextBox textBox;
 
+    public int teamSize = 3;
+
     private string message;
     private bool simulate = true;
 
+    private GameObject[] team1;
+    private GameObject[] team2;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        team1 = SetupTeam();
+        team2 = SetupTeam();
     }
 
     // Update is called once per frame
@@ -91,5 +97,17 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(delay);
         gState = newState;
         simulate = true;
+    }
+
+    private GameObject[] SetupTeam()
+    {
+        GameObject[] team = new GameObject[teamSize];
+
+        for (int i = 0; i < teamSize; i++)
+        {
+            team[i] = Instantiate(prefab);
+        }
+
+        return team;
     }
 }
