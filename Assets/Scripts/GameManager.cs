@@ -11,7 +11,8 @@ public class GameManager : MonoBehaviour
         pick,
         fight,
         result,
-        victory
+        victory,
+        checkIfContinue
     }
 
     public GameState gState;
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(simulate)
+        if (simulate)
         {
             simulate = false;
             switch (gState)
@@ -62,22 +63,30 @@ public class GameManager : MonoBehaviour
                     StartCoroutine(TransitionTimer(2f, GameState.fight));
                     break;
                 case GameState.fight:
-                    //brief 2 hint
-                    //if(RandomFighterA.Stats.Health > 0 && RandomFighterB.Stats.Health > 0)
-                    //both are alive, keepm fighting
-                    //else one of them is dead, check which one, and print the winner to the results
-                    //might be good to set message to be the attacks and health.
-                    //A tip: message = "some random info" then call SendMessage so you can then send another
-                    //line by setting message = "new info" again.
-                    //you can put as many phases as you like, consider how much code you're writing
-                    if (Random.Range(1,20) >= 15)
+                    //if one of the fighters has no health left the fight will end
+                    if (Fighter1.health = 0 || Fighter2.health = 0)
                     {
                         message = "Fight has ended";
                         StartCoroutine(TransitionTimer(2f, GameState.result));
                     }
-                    else 
+                    else
                     {
                         message = "Fighting...";
+                        //the fighters fight
+                        if (Random.Range(0, 7) >= 3)
+                        {
+                            Random.Range(team1).GetComponent<Stats>().Attack;
+                            Random.Range(team2).GetComponent<Stats>().health - team1 GetComponent<Stats>().Attack;
+                        }
+                        else
+                        {
+                            Random.Range(team2).GetComponent<Stats>().Attack;
+                            Random.Range(team1).GetComponent<Stats>().health - team2 GetComponent<Stats>().Attack;
+                        }
+                        if (uiM != null)
+                        {
+                            uiM.UpdateBars();
+                        }
                         StartCoroutine(TransitionTimer(2f, GameState.fight));
                     }
                     Debug.Log(message);
@@ -94,10 +103,44 @@ public class GameManager : MonoBehaviour
                     Debug.Log(message);
                     textBox.NewMessage(message);
                     break;
+                case GameState.checkIfContinue:
+                    //this is when the game checks if there are any fighters left
+                    for (int i = 0; i < teamSize; i++)
+                    {
+                        int killed = 0;
+                        if (team1[i].GetComponent<Stats>().health <= 0)
+                        {
+                            killed++;
+                        }
+                        if (killed >= teamSize)
+                        {
+                            Debug.Log("Team 1 as is defeated!");
+                            Application.Quit();
+                        }
+                    }
+                    for (int x = 0; x < teamSize; x++)
+                    {
+                        int killed = 0;
+                        if (team2[x].GetComponent<Stats>().health <= 0)
+                        {
+                            //character is dead
+                            killed++;
+                        }
+                        else
+                        {
+                            //pick this character to fight
+                        }
+                        if (killed >= teamSize)
+                        {
+                            Debug.Log("Team 2 is defeated!");
+                            Application.Quit();
+                        }
+
+                    }
             }
         }
-        
     }
+
     //waits for ... seconds then goes to new state
     IEnumerator TransitionTimer(float delay, GameState newState)
     {
