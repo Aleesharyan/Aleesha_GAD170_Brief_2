@@ -27,9 +27,13 @@ public class GameManager : MonoBehaviour
     private GameObject[] team1;
     private GameObject[] team2;
 
+    private GameObject Fighter1;
+    private GameObject Fighter2;
+
     // Start is called before the first frame update
     void Awake()
     {
+        //Setting up teams
         team1 = SetupTeam();
         team2 = SetupTeam();
     }
@@ -52,6 +56,9 @@ public class GameManager : MonoBehaviour
                     message = "Picking fighters";
                     Debug.Log(message);
                     textBox.NewMessage(message);
+                    //Here im trying to get it to pick my fighters
+                    Fighter1 = PickFightersTeam1;
+                    Fighter2 = PickFightersTeam2;
                     StartCoroutine(TransitionTimer(2f, GameState.fight));
                     break;
                 case GameState.fight:
@@ -99,6 +106,7 @@ public class GameManager : MonoBehaviour
         simulate = true;
     }
 
+    //Team setup
     private GameObject[] SetupTeam()
     {
         GameObject[] team = new GameObject[teamSize];
@@ -110,4 +118,27 @@ public class GameManager : MonoBehaviour
 
         return team;
     }
+
+    //PIcking the fighters that'll fight
+    public GameObject[PickFightersTeam1()] 
+    {
+        for (int a = 0; a < 1; a++);
+        {
+            GameObject Fighter1 = team1[Random.Range(0, team1.Length)];
+        }
+        return Fighter1;
+        
+    }
+
+    public GameObject[PickFightersTeam2()] 
+    {
+        for (int a = 0; a < 1; a++);
+        {
+            GameObject Fighter1 = team1[Random.Range(0, team1.Length)];
+        }
+        return Fighter2;
+
+    }
+
+
 }
